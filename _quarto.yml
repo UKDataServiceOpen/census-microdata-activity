@@ -4,6 +4,7 @@ project:
 
 ### Code execution options
 execute:                       ### How R code is going to be interpreted
+  eval: false
   echo: true                   ### These can be changed for individual code blocks
   warning: false
   message: false
@@ -11,9 +12,9 @@ execute:                       ### How R code is going to be interpreted
 jupyter: nbstata                ### How Stata code is going to be interpreted
   
 book:                                       ### Book specific formating
-  title: "UKDS  Quarto html template" ### Replace as necessary 
+  title: "Census microdata activity - R code" ### Replace as necessary 
   author: "UK Data Service"                  
-  date: "2025-10-14"                        ### Replace as necessary
+  date: "2026-02-14"                        ### Replace as necessary
   date-format: "MMMM YYYY"              
 #  output-file: "single_output_file"         ### In case a single file output is required. Uncomment if necessary
 
@@ -21,8 +22,6 @@ book:                                       ### Book specific formating
   chapters:
     - index.qmd                             ### Example pages to render as part of the book  (add/remove as required)
     - chap1.qmd                             ### ***index.qmd is mandatory***
-    - chap2.qmd
-    - chap3.qmd
 
 ### A more complex document structure:
 # chapters:
