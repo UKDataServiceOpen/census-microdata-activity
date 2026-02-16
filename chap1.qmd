@@ -1,3 +1,6 @@
+---
+title: "R code for module activity"
+---
 
 ```{r}
 #| eval: false
@@ -15,6 +18,9 @@
 # install.packages("ggrepel")
 # install.packages("patchwork")
 # install.packages("gridExtra")
+---
+title: "R code"
+---
 
 # Load packages
 

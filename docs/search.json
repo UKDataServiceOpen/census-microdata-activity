@@ -52,91 +52,111 @@
   {
     "objectID": "chap1.html",
     "href": "chap1.html",
-    "title": "1- Install and load the main packages",
+    "title": "R code for module activity",
     "section": "",
-    "text": "Install packages\n#| eval: false",
+    "text": "1- Install and load the main packages\n#| eval: false",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>1- Install and load the main packages</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code</span>"
     ]
   },
   {
     "objectID": "chap1.html#load-the-dataset-and-make-a-copy",
     "href": "chap1.html#load-the-dataset-and-make-a-copy",
-    "title": "1- Install and load the main packages",
+    "title": "R code for module activity",
     "section": "2- Load the dataset and make a copy",
     "text": "2- Load the dataset and make a copy\npublicmicrodatateachingsample &lt;- read_sav(“data/publicmicrodatateachingsample.sav”)",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>1- Install and load the main packages</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code</span>"
     ]
   },
   {
     "objectID": "chap1.html#drop-unnecessary-variables",
     "href": "chap1.html#drop-unnecessary-variables",
-    "title": "1- Install and load the main packages",
+    "title": "R code for module activity",
     "section": "3- Drop unnecessary variables",
     "text": "3- Drop unnecessary variables\ncensus2021teaching &lt;- census2021teaching[,c(“health_in_general”, “hours_per_week_worked”, “resident_age_7d”,“sex”, “ethnic_group_tb_6a”, “approx_social_grade”)]",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>1- Install and load the main packages</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code</span>"
     ]
   },
   {
     "objectID": "chap1.html#exploratory-analysis",
     "href": "chap1.html#exploratory-analysis",
-    "title": "1- Install and load the main packages",
+    "title": "R code for module activity",
     "section": "4- Exploratory analysis",
     "text": "4- Exploratory analysis",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>1- Install and load the main packages</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code</span>"
     ]
   },
   {
     "objectID": "chap1.html#you-can-also-calculate-these-frequencies-and-percentages",
     "href": "chap1.html#you-can-also-calculate-these-frequencies-and-percentages",
-    "title": "1- Install and load the main packages",
+    "title": "R code for module activity",
     "section": "You can also calculate these frequencies and percentages",
     "text": "You can also calculate these frequencies and percentages",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>1- Install and load the main packages</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code</span>"
     ]
   },
   {
     "objectID": "chap1.html#with-appropriate-labels.",
     "href": "chap1.html#with-appropriate-labels.",
-    "title": "1- Install and load the main packages",
+    "title": "R code for module activity",
     "section": "with appropriate labels.",
     "text": "with appropriate labels.",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>1- Install and load the main packages</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code</span>"
     ]
   },
   {
     "objectID": "chap1.html#drop-under-16-from-the-table",
     "href": "chap1.html#drop-under-16-from-the-table",
-    "title": "1- Install and load the main packages",
+    "title": "R code for module activity",
     "section": "Drop under 16 from the table",
     "text": "Drop under 16 from the table\ncensus2021teaching &lt;- subset(census2021teaching, resident_age_7d != 1)\n# 4.2- Bivariate analysis #\n# Cross tabulation of Poor_health by hours worked tabulation &lt;- table(census2021teaching\\(Poor_health, census2021teaching\\)hours_per_week_worked) tabulation\n# Row percentages prop.table(tabulation, margin = 1) * 100\n# Column percentages prop.table(tabulation, margin = 2) * 100\nnames(census2021teaching)\n# Chi square test\n# a) Creating cross tabulations to be tested tabulation.health_hours &lt;- table(census2021teaching\\(Poor_health, census2021teaching\\)hours_per_week_worked) tabulation.health_age &lt;- table(census2021teaching\\(Poor_health, census2021teaching\\)resident_age_7d) tabulation.health_sex &lt;- table(census2021teaching\\(Poor_health, census2021teaching\\)sex) tabulation.health_ethnicity &lt;- table(census2021teaching\\(Poor_health, census2021teaching\\)ethnic_group_tb_6a) tabulation.health_classes &lt;- table(census2021teaching\\(Poor_health, census2021teaching\\)approx_social_grade)\n# b) chi square test on health and our 5 variables chisq.test(tabulation.health_hours) chisq.test(tabulation.health_age) chisq.test(tabulation.health_sex) chisq.test(tabulation.health_ethnicity) chisq.test(tabulation.health_classes)",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>1- Install and load the main packages</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code</span>"
     ]
   },
   {
     "objectID": "chap1.html#regression-model",
     "href": "chap1.html#regression-model",
-    "title": "1- Install and load the main packages",
+    "title": "R code for module activity",
     "section": "5 Regression model",
     "text": "5 Regression model\n# Recode variables as factors with labels census2021teaching\\(hours_per_week_worked &lt;- factor(\n    census2021teaching\\)hours_per_week_worked, levels = c(1, 2, 3, 4, -8), labels = c(“0-15”, “16-30”, “31-48”, “49+”, “Does not apply”) )\ncensus2021teaching\\(resident_age_7d &lt;- factor(\n    census2021teaching\\)resident_age_7d, levels = c(1, 2, 3, 4, 5, 6, 7, -8), labels = c(“0-15”, “16-24”, “25-34”, “35-44”, “45-54”, “55-64”, “65+”, “Not applicable”) )\ncensus2021teaching\\(ethnic_group_tb_6a &lt;- factor(\n    census2021teaching\\)ethnic_group_tb_6a, levels = c(1, 2, 3, 4, 5, -8), labels = c(“Asian”, “Black”, “Mixed”, “White”, “Other”, “Does not apply”) )\ncensus2021teaching\\(approx_social_grade &lt;- factor(\n    census2021teaching\\)approx_social_grade, levels = c(1, 2, 3, 4, -8), labels = c(“Higher, intermediate managers”, “Supervisory, junior managers”, “Skilled manual”, “Semi-skilled, unskilled manual”, “Not applicable”) )\ncensus2021teaching\\(sex &lt;- factor(\n    census2021teaching\\)sex, levels = c(1, 2), labels = c(“Male”, “Female”) )\n# Pick references that are central or policy relevant census2021teaching\\(hours_per_week_worked &lt;- relevel(census2021teaching\\)hours_per_week_worked, ref = “31-48”) census2021teaching\\(resident_age_7d         &lt;- relevel(census2021teaching\\)resident_age_7d, ref = “45-54”) census2021teaching\\(sex                  &lt;- relevel(census2021teaching\\)sex, ref = “Male”) census2021teaching\\(ethnic_group_tb_6a            &lt;- relevel(census2021teaching\\)ethnic_group_tb_6a, ref = “White”) census2021teaching\\(approx_social_grade         &lt;- relevel(census2021teaching\\)approx_social_grade, ref = “Higher, intermediate managers”)",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>1- Install and load the main packages</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code</span>"
     ]
   },
   {
     "objectID": "chap1.html#fit-logistic-regression",
     "href": "chap1.html#fit-logistic-regression",
-    "title": "1- Install and load the main packages",
+    "title": "R code for module activity",
     "section": "6 Fit logistic regression",
     "text": "6 Fit logistic regression\nmodel_health &lt;- glm( Poor_health ~ hours_per_week_worked + resident_age_7d + sex + ethnic_group_tb_6a + approx_social_grade, data = census2021teaching, family = binomial(link = “logit”) )\n# Summary of results summary(model_health)",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>1- Install and load the main packages</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code</span>"
+    ]
+  },
+  {
+    "objectID": "chap1.html#install.packagesgridextra",
+    "href": "chap1.html#install.packagesgridextra",
+    "title": "R code for module activity",
+    "section": "# install.packages(“gridExtra”)",
+    "text": "# install.packages(“gridExtra”)",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code</span>"
+    ]
+  },
+  {
+    "objectID": "chap1.html#title-r-code",
+    "href": "chap1.html#title-r-code",
+    "title": "R code for module activity",
+    "section": "title: “R code”",
+    "text": "title: “R code”",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code</span>"
     ]
   }
 ]
