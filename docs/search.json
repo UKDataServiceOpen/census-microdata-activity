@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "Census microdata activity - R code",
     "section": "",
-    "text": "Introduction\nWelcome to the census microdata activity - R code. This page provides the R code used in the module activity.",
+    "text": "Introduction\nWelcome to the census microdata activity - R code. This page provides the R code used in the module activity.\n\nWhat you will find in this page\n\nAn introduction to the census microdata activity\nA chapter containing the full R code used for analysis\n\n\n\nRequirements\nTo use the code in this page, you will need:\n\nR and RStudio installed on your computer\nThe required R packages installed\nDownload the teaching dataset: 2021 census microdata open access, England and Wales\n\n\n\nData access and file location\nIn this code, the dataset is referenced using the following relative path: data/publicmicrodatateachingsample.sav\nPlease, update this file path in your code accordingly so that R can locate the dataset file on your computer.\n\n\nHow to use this page\nNavigate to Chapter 1 to view the complete R script. At this stage, the code is displayed for reference and can be copied but does not run within the page.",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
     ]

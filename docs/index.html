@@ -169,13 +169,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul class="collapse">
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
-  <ul class="collapse">
-  <li><a href="#what-you-will-find-in-this-page" id="toc-what-you-will-find-in-this-page" class="nav-link" data-scroll-target="#what-you-will-find-in-this-page">What you will find in this page</a></li>
-  <li><a href="#requirements" id="toc-requirements" class="nav-link" data-scroll-target="#requirements">Requirements</a></li>
-  <li><a href="#data-access-and-file-location" id="toc-data-access-and-file-location" class="nav-link" data-scroll-target="#data-access-and-file-location">Data access and file location</a></li>
-  <li><a href="#how-to-use-this-page" id="toc-how-to-use-this-page" class="nav-link" data-scroll-target="#how-to-use-this-page">How to use this page</a></li>
-  </ul></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
   </ul>
 </nav>
     </div>
@@ -216,15 +210,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="introduction" class="level1">
 <h1>Introduction</h1>
 <p>Welcome to the census microdata activity - R code. This page provides the R code used in the module activity.</p>
-<section id="what-you-will-find-in-this-page" class="level2">
-<h2 class="anchored" data-anchor-id="what-you-will-find-in-this-page">What you will find in this page</h2>
+<section id="what-you-will-find-in-this-page" class="level3">
+<h3 class="anchored" data-anchor-id="what-you-will-find-in-this-page">What you will find in this page</h3>
 <ul>
 <li>An introduction to the census microdata activity</li>
 <li>A chapter containing the full R code used for analysis</li>
 </ul>
 </section>
-<section id="requirements" class="level2">
-<h2 class="anchored" data-anchor-id="requirements">Requirements</h2>
+<section id="requirements" class="level3">
+<h3 class="anchored" data-anchor-id="requirements">Requirements</h3>
 <p>To use the code in this page, you will need:</p>
 <ul>
 <li>R and RStudio installed on your computer</li>
@@ -232,13 +226,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Download the teaching dataset: <a href="https://datacatalogue.ukdataservice.ac.uk/studies/study/9202#!/access-data">2021 census microdata open access, England and Wales</a></li>
 </ul>
 </section>
-<section id="data-access-and-file-location" class="level2">
-<h2 class="anchored" data-anchor-id="data-access-and-file-location">Data access and file location</h2>
+<section id="data-access-and-file-location" class="level3">
+<h3 class="anchored" data-anchor-id="data-access-and-file-location">Data access and file location</h3>
 <p>In this code, the dataset is referenced using the following relative path: <strong>data/publicmicrodatateachingsample.sav</strong></p>
 <p>Please, update this file path in your code accordingly so that R can locate the dataset file on your computer.</p>
 </section>
-<section id="how-to-use-this-page" class="level2">
-<h2 class="anchored" data-anchor-id="how-to-use-this-page">How to use this page</h2>
+<section id="how-to-use-this-page" class="level3">
+<h3 class="anchored" data-anchor-id="how-to-use-this-page">How to use this page</h3>
 <p>Navigate to Chapter 1 to view the complete R script. At this stage, the code is displayed for reference and can be copied but does not run within the page.</p>
 
 
@@ -717,12 +711,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-2"><a href="#cb1-2"></a></span>
 <span id="cb1-3"><a href="#cb1-3"></a>Welcome to the census microdata activity - R code. This page provides the R code used in the module activity.</span>
 <span id="cb1-4"><a href="#cb1-4"></a></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="fu">## What you will find in this page</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="fu">### What you will find in this page</span></span>
 <span id="cb1-6"><a href="#cb1-6"></a></span>
 <span id="cb1-7"><a href="#cb1-7"></a><span class="ss">- </span>An introduction to the census microdata activity</span>
 <span id="cb1-8"><a href="#cb1-8"></a><span class="ss">- </span>A chapter containing the full R code used for analysis</span>
 <span id="cb1-9"><a href="#cb1-9"></a></span>
-<span id="cb1-10"><a href="#cb1-10"></a><span class="fu">## Requirements</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="fu">### Requirements</span></span>
 <span id="cb1-11"><a href="#cb1-11"></a></span>
 <span id="cb1-12"><a href="#cb1-12"></a>To use the code in this page, you will need:</span>
 <span id="cb1-13"><a href="#cb1-13"></a></span>
@@ -730,13 +724,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-15"><a href="#cb1-15"></a><span class="ss">- </span>The required R packages installed</span>
 <span id="cb1-16"><a href="#cb1-16"></a><span class="ss">- </span>Download the teaching dataset: <span class="co">[</span><span class="ot">2021 census microdata open access, England and Wales</span><span class="co">](https://datacatalogue.ukdataservice.ac.uk/studies/study/9202#!/access-data)</span></span>
 <span id="cb1-17"><a href="#cb1-17"></a></span>
-<span id="cb1-18"><a href="#cb1-18"></a><span class="fu">## Data access and file location</span></span>
+<span id="cb1-18"><a href="#cb1-18"></a><span class="fu">### Data access and file location</span></span>
 <span id="cb1-19"><a href="#cb1-19"></a></span>
 <span id="cb1-20"><a href="#cb1-20"></a>In this code, the dataset is referenced using the following relative path: **data/publicmicrodatateachingsample.sav**</span>
 <span id="cb1-21"><a href="#cb1-21"></a></span>
 <span id="cb1-22"><a href="#cb1-22"></a>Please, update this file path in your code accordingly so that R can locate the dataset file on your computer.</span>
 <span id="cb1-23"><a href="#cb1-23"></a></span>
-<span id="cb1-24"><a href="#cb1-24"></a><span class="fu">## How to use this page</span></span>
+<span id="cb1-24"><a href="#cb1-24"></a><span class="fu">### How to use this page</span></span>
 <span id="cb1-25"><a href="#cb1-25"></a></span>
 <span id="cb1-26"><a href="#cb1-26"></a>Navigate to Chapter 1 to view the complete R script. At this stage, the code is displayed for reference and can be copied but does not run within the page.</span>
 <span id="cb1-27"><a href="#cb1-27"></a></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>

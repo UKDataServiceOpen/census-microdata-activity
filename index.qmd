@@ -2,12 +2,12 @@
 
 Welcome to the census microdata activity - R code. This page provides the R code used in the module activity.
 
-## What you will find in this page
+### What you will find in this page
 
 - An introduction to the census microdata activity
 - A chapter containing the full R code used for analysis
 
-## Requirements
+### Requirements
 
 To use the code in this page, you will need:
 
@@ -15,13 +15,13 @@ To use the code in this page, you will need:
 - The required R packages installed
 - Download the teaching dataset: [2021 census microdata open access, England and Wales](https://datacatalogue.ukdataservice.ac.uk/studies/study/9202#!/access-data)
 
-## Data access and file location
+### Data access and file location
 
 In this code, the dataset is referenced using the following relative path: **data/publicmicrodatateachingsample.sav**
 
 Please, update this file path in your code accordingly so that R can locate the dataset file on your computer.
 
-## How to use this page
+### How to use this page
 
 Navigate to Chapter 1 to view the complete R script. At this stage, the code is displayed for reference and can be copied but does not run within the page.
 
