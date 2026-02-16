@@ -17,11 +17,9 @@ To use the code in this page, you will need:
 
 ## Data access and file location
 
-In this code, the dataset is referenced using the following relative path:
+In this code, the dataset is referenced using the following relative path: **data/publicmicrodatateachingsample.sav**
 
-`data/publicmicrodatateachingsample.sav`
-
-If your dataset is stored elsewhere, update the file path in the code accordingly.
+Please, update this file path in your code accordingly so that R can locate the dataset file on your computer.
 
 ## How to use this page
 

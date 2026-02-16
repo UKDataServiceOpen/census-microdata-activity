@@ -34,7 +34,7 @@
     "href": "index.html#data-access-and-file-location",
     "title": "Census microdata activity - R code",
     "section": "Data access and file location",
-    "text": "Data access and file location\nIn this code, the dataset is referenced using the following relative path:\ndata/publicmicrodatateachingsample.sav\nIf your dataset is stored elsewhere, update the file path in the code accordingly.",
+    "text": "Data access and file location\nIn this code, the dataset is referenced using the following relative path: data/publicmicrodatateachingsample.sav\nPlease, update this file path in your code accordingly so that R can locate the dataset file on your computer.",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
     ]
