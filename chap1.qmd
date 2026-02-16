@@ -1,6 +1,3 @@
----
-title: "R code for module activity"
----
 
 ```{r}
 #| eval: false
