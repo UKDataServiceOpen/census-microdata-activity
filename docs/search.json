@@ -54,9 +54,9 @@
     "href": "chap1.html",
     "title": "R code for module activity",
     "section": "",
-    "text": "1- Install and load the main packages\n#| eval: false",
+    "text": "1- Install and load the main packages",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code for module activity</span>"
     ]
   },
   {
@@ -64,9 +64,9 @@
     "href": "chap1.html#load-the-dataset-and-make-a-copy",
     "title": "R code for module activity",
     "section": "2- Load the dataset and make a copy",
-    "text": "2- Load the dataset and make a copy\npublicmicrodatateachingsample &lt;- read_sav(“data/publicmicrodatateachingsample.sav”)",
+    "text": "2- Load the dataset and make a copy\n\npublicmicrodatateachingsample &lt;- read_sav(\"data/publicmicrodatateachingsample.sav\")\n\ncensus2021teaching &lt;- publicmicrodatateachingsample\n\nImportant: Remember to change to pathway to your dataset accordingly.\nIf the read_sav code does not work, you can use the Import Dataset button in the Environment pane to load the dataset in R.",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code for module activity</span>"
     ]
   },
   {
@@ -74,9 +74,9 @@
     "href": "chap1.html#drop-unnecessary-variables",
     "title": "R code for module activity",
     "section": "3- Drop unnecessary variables",
-    "text": "3- Drop unnecessary variables\ncensus2021teaching &lt;- census2021teaching[,c(“health_in_general”, “hours_per_week_worked”, “resident_age_7d”,“sex”, “ethnic_group_tb_6a”, “approx_social_grade”)]",
+    "text": "3- Drop unnecessary variables\n\ncensus2021teaching &lt;- census2021teaching[,c(\"health_in_general\",\n                                            \"hours_per_week_worked\",\n                                            \"resident_age_7d\",\"sex\", \n                                            \"ethnic_group_tb_6a\",\n                                            \"approx_social_grade\")]",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code for module activity</span>"
     ]
   },
   {
@@ -84,9 +84,9 @@
     "href": "chap1.html#exploratory-analysis",
     "title": "R code for module activity",
     "section": "4- Exploratory analysis",
-    "text": "4- Exploratory analysis",
+    "text": "4- Exploratory analysis\n\n4.1- Univariate analysis\n\n\n4.1.1 Univariate analysis for health in general and hours worked\n\nFrequencies for health in general and hours worked\n\ntable(census2021teaching$health_in_general)\n\ntable(census2021teaching$hours_per_week_worked)\n\n\n\nPercentages for health in general and hours worked\n\nprop.table(table(census2021teaching$health_in_general)) * 100\n\nprop.table(table(census2021teaching$hours_per_week_worked)) * 100\n\nYou can also calculate these frequencies and percentages with appropriate labels.\n\n\nFrequencies and percentages with labels for health in general and hours worked\n\ncensus2021teaching %&gt;%\n  mutate(\n    health_code = as.integer(as.character(health_in_general)),\n    health_label = factor(\n      health_code,\n      levels = c(1, 2, 3, 4, 5, -8),\n      labels = c(\"Very good\", \"Good\", \"Fair\", \"Bad\", \"Very bad\", \"Does not apply\")\n    )\n  ) %&gt;%\n  count(health_label) %&gt;%\n  mutate(percent = round(100 * n / sum(n), 1))\n\n\ncensus2021teaching %&gt;%\n  mutate(\n    hours_code = as.integer(as.character(hours_per_week_worked)),\n    hours_label = factor(\n      hours_code,\n      levels = c(1, 2, 3, 4, -8),\n      labels = c(\"[0 – 15]\", \"[16 – 30]\", \"[31 – 48]\", \"[49 and +]\", \"Does not apply\")\n    )\n  ) %&gt;%\n  count(hours_label) %&gt;%\n  mutate(percent = round(100 * n / sum(n), 1))\n\nYou can also generate pie charts for better visualization\n\n\n\na) Pie chart for Health in general\n\na.1) Create a labelled health variable\n\nhealth &lt;- census2021teaching %&gt;%\n  mutate(\n    health_code = as.integer(as.character(health_in_general)),\n    health_label = factor(\n      health_code,\n      levels = c(1,2,3,4,5,-8),\n      labels = c(\"Very good\", \"Good\", \"Fair\", \"Bad\", \"Very bad\", \"Not applicable\")\n    )\n  ) %&gt;%\n  filter(!is.na(health_label)) %&gt;%\n  count(health_label, name = \"n\") %&gt;%\n  mutate(\n    pct = round(100 * n / sum(n), 1),\n    label = paste0(health_label, \" (\", pct, \"%)\")\n  )\n\n\n\na.2) Plot pie chart\n\np1 &lt;- ggplot(health, aes(x = \"\", y = n, fill = health_label)) +\n  geom_col(width = 1, color = \"white\") +\n  coord_polar(theta = \"y\") +\n  geom_label_repel(aes(label = label),\n                   position = position_stack(vjust = 0.5),\n                   show.legend = FALSE,\n                   size = 3) +\n  labs(title = \"Distribution of general health\", fill = \"Health status\") +\n  theme_void()+\n  scale_fill_brewer(palette = \"Set2\") +\n  theme(plot.title = element_text(size = 16, hjust = 1))\n\np1\n\n\n\n\nb) Pie chart for Hours worked\n\nb.1) Create a labelled hours worked variable\n\nhours &lt;- census2021teaching %&gt;%\n  mutate(\n    hours_code = as.integer(as.character(hours_per_week_worked)),\n    hours_label = factor(\n      hours_code,\n      levels = c(1, 2, 3, 4, -8),\n      labels = c(\"[0 – 15]\", \"[16 – 30]\", \"[31 – 48]\", \"[49 and +]\", \"Not applicable\")\n    )\n  ) %&gt;%\n  filter(!is.na(hours_label)) %&gt;%\n  count(hours_label, name = \"n\") %&gt;%\n  mutate(\n    pct = round(100 * n / sum(n), 1),\n    label = paste0(hours_label, \" (\", pct, \"%)\")\n  )\n\n\n\nb.2) Plot pie chart\n\np2 &lt;- ggplot(hours, aes(x = \"\", y = n, fill = hours_label)) +\n  geom_col(width = 1, color = \"white\") +\n  coord_polar(theta = \"y\") +\n  geom_label_repel(aes(label = label),\n                   position = position_stack(vjust = 0.5),\n                   show.legend = FALSE,\n                   size = 3) +\n  labs(title = \"Distribution of worked hours\", fill = \"Hours worked\") +\n  theme_void()+\n  scale_fill_brewer(palette = \"Dark2\") +\n  theme(plot.title = element_text(size = 16, hjust = 1))\n\np2\n\n\n\n\n4.1.1.1 Transformation of variable Health in general\nCreate a new variable called health_binary by regrouping health in general in two broader categories: Good or very good health and Poor health\n\ncensus2021teaching$health_binary &lt;- ifelse(\n  census2021teaching$health_in_general %in% c(1, 2), \"Good or very good health\",\n  ifelse(census2021teaching$health_in_general %in% c(3, 4, 5), \"Poor health\", NA)\n)\n\n\nDrop rows where health_in_general = -8 (Does not apply)\n\ncensus2021teaching &lt;- subset(census2021teaching, health_in_general != -8)\n\n\n\nCheck the new variable’s distribution\n\ntable(census2021teaching$health_binary)\n\n\n\nCreate variable Poor_health and check its distribution\nCode a binary variable that takes 1 for poor health and 0 otherwise. Call this new variable Poor_health. This variable will be the explained variable of our regression model.\n\ncensus2021teaching$Poor_health &lt;- ifelse(\n  census2021teaching$health_binary == \"Poor health\", 1,\n  ifelse(census2021teaching$health_binary == \"Good or very good health\", 0, NA)\n)\n\ntable(census2021teaching$Poor_health)\n\n\n\n\n4.1.2 Univariate analysis for age, sex, ethnicity, social category\n\nFrequencies and percentages for age, sex, ethnicity, social category\n\ntable(census2021teaching$resident_age_7d)\ntable(census2021teaching$sex)\ntable(census2021teaching$ethnic_group_tb_6a)\ntable(census2021teaching$approx_social_grade)\n\nprop.table(table(census2021teaching$resident_age_7d)) * 100\nprop.table(table(census2021teaching$sex)) * 100\nprop.table(table(census2021teaching$ethnic_group_tb_6a)) * 100\nprop.table(table(census2021teaching$approx_social_grade)) * 100\n\n\n\nPlot pie chart Age variable\n\na) Create a labelled Age variable\n\nAge &lt;- census2021teaching %&gt;%\n  mutate(\n    Age_code = as.integer(as.character(resident_age_7d)),\n    Age_label = factor(\n      Age_code,\n      levels = c(1, 2, 3, 4,5,6,7, -8),\n      labels = c(\"]0 – 15]\", \"[16 – 24]\", \"[25 – 34]\", \"[35 - 44]\", \"[45 - 54]\", \"[55 - 64]\", \"[65 and +]\",\"Not applicable\")\n    )\n  ) %&gt;%\n  filter(!is.na(Age_label)) %&gt;%\n  count(Age_label, name = \"n\") %&gt;%\n  mutate(\n    pct = round(100 * n / sum(n), 1),\n    label = paste0(Age_label, \" (\", pct, \"%)\")\n  )\n\n\n\nb) Plot pie chart\n\nggplot(Age, aes(x = \"\", y = n, fill = Age_label)) +\n  geom_col(width = 1, color = \"white\") +\n  coord_polar(theta = \"y\") +\n  geom_label_repel(aes(label = label),\n                   position = position_stack(vjust = 0.5),\n                   show.legend = FALSE,\n                   size = 3) +\n  labs(title = \"Distribution of respondents by Age\", fill = \"Resident age\") +\n  theme_void()+\n  scale_fill_brewer(palette = \"Pastel1\") +\n  theme(plot.title = element_text(size = 16, hjust = 1))\n\n\n\n\nHistogram for Sex variable\n\na) Recode sex variable with labels\n\nsex &lt;- census2021teaching %&gt;%\n  mutate(sex_label = factor(sex, levels = c(1, 2), labels = c(\"Male\", \"Female\"))) %&gt;%\n  count(sex_label, name = \"n\") %&gt;%\n  mutate(prop = n / sum(n),\n         label = scales::percent(prop, accuracy = 0.1))\n\n\n\nb) Plot histogram\n\nggplot(sex, aes(x = sex_label, y = prop)) +\n  geom_col(fill = \"skyblue\", color = \"black\", width = 0.3) +\n  geom_text(aes(label = label), vjust = -0.5) +\n  scale_y_continuous(labels = scales::percent_format()) +\n  scale_x_discrete(expand = expansion(mult = c(0.5, 0.7))) +\n  labs(title = \"Distribution of respondents by sex\", x = \"\", y = \"Percentage\") +\n  theme_classic()+\n  theme(axis.text.x = element_text(size = 12))+\n  theme(plot.title = element_text(size = 16, hjust = 0.5))\n\n\n\n\nHistogram for Ethnicity variable\n\na) Recode Ethnicity variable with labels\n\nEthnicity &lt;- census2021teaching %&gt;%\n  mutate(Ethnicity_label = factor(ethnic_group_tb_6a, levels = c(1, 2, 3, 4, 5, -8), \n                                  labels = c(\"Asian\", \"Black\", \"Mixed\", \"White\", \"Other\", \"Does not apply\"))) %&gt;%\n  count(Ethnicity_label, name = \"n\") %&gt;%\n  mutate(prop = n / sum(n),\n         label = scales::percent(prop, accuracy = 0.1))\n\n\n\nb) Plot histogram\n\nggplot(Ethnicity, aes(x = Ethnicity_label, y = prop)) +\n  geom_col(fill = \"chocolate\", color = \"black\", width = 0.3) +\n  geom_text(aes(label = label), vjust = -0.5) +\n  scale_y_continuous(labels = scales::percent_format()) +\n  labs(title = \"Distribution of respondents by Ethnicity\", x = \"\", y = \"Percentage\") +\n  theme_classic()+\n  theme(axis.text.x = element_text(size = 12))+\n  theme(plot.title = element_text(size = 16, hjust = 0.5))\n\n\n\n\nPie chart for variable social class\n\na) Create a labelled social class variable\n\nSocial_class &lt;- census2021teaching %&gt;%\n  mutate(\n    Social_class_code = as.integer(as.character(approx_social_grade)),\n    Social_class_label = factor(\n      Social_class_code,\n      levels = c(1, 2, 3, 4, -8),\n      labels = c(\"Higher, intermediate managers\", \"Supervisory, junior managers\", \n                 \"Skilled manual\", \"Semi-skilled, unskilled manual\",\"Not applicable\")\n    )\n  ) %&gt;%\n  filter(!is.na(Social_class_label)) %&gt;%\n  count(Social_class_label, name = \"n\") %&gt;%\n  mutate(\n    pct = round(100 * n / sum(n), 1),\n    label = paste0(Social_class_label, \" (\", pct, \"%)\")\n  )\n\n\n\nb) Plot pie chart\n\nggplot(Social_class, aes(x = \"\", y = n, fill = Social_class_label)) +\n  geom_col(width = 1, color = \"white\") +\n  coord_polar(theta = \"y\") +\n  geom_label_repel(aes(label = label),\n                   position = position_stack(vjust = 0.5),\n                   show.legend = FALSE,\n                   size = 3) +\n  labs(title = \"Distribution of respondents by Social class\", fill = \"Social class\") +\n  theme_void()+\n  scale_fill_brewer(palette = \"Pastel2\") +\n  theme(plot.title = element_text(size = 16, hjust = 1))\n\n\n\nDrop under 16 from the table\n\ncensus2021teaching &lt;- subset(census2021teaching, resident_age_7d != 1)\n\n\n\n\n\n4.2- Bivariate analysis\n\nCross tabulation of Poor_health by hours worked\n\ntabulation &lt;- table(census2021teaching$Poor_health, census2021teaching$hours_per_week_worked)\ntabulation\n\n\n\nRow percentages\n\nprop.table(tabulation, margin = 1) * 100\n\n\n\nColumn percentages\n\nprop.table(tabulation, margin = 2) * 100\n\n\n\nChi square test\n\na) Creating cross tabulations to be tested\n\ntabulation.health_hours &lt;- table(census2021teaching$Poor_health, census2021teaching$hours_per_week_worked)\ntabulation.health_age &lt;- table(census2021teaching$Poor_health, census2021teaching$resident_age_7d)\ntabulation.health_sex &lt;- table(census2021teaching$Poor_health, census2021teaching$sex)\ntabulation.health_ethnicity &lt;- table(census2021teaching$Poor_health, census2021teaching$ethnic_group_tb_6a)\ntabulation.health_classes &lt;- table(census2021teaching$Poor_health, census2021teaching$approx_social_grade)\n\n\n\nb) chi square test on health and our 5 other variables\n\nchisq.test(tabulation.health_hours)\nchisq.test(tabulation.health_age)\nchisq.test(tabulation.health_sex)\nchisq.test(tabulation.health_ethnicity)\nchisq.test(tabulation.health_classes)",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code for module activity</span>"
     ]
   },
   {
@@ -124,9 +124,9 @@
     "href": "chap1.html#regression-model",
     "title": "R code for module activity",
     "section": "5 Regression model",
-    "text": "5 Regression model\n# Recode variables as factors with labels census2021teaching\\(hours_per_week_worked &lt;- factor(\n    census2021teaching\\)hours_per_week_worked, levels = c(1, 2, 3, 4, -8), labels = c(“0-15”, “16-30”, “31-48”, “49+”, “Does not apply”) )\ncensus2021teaching\\(resident_age_7d &lt;- factor(\n    census2021teaching\\)resident_age_7d, levels = c(1, 2, 3, 4, 5, 6, 7, -8), labels = c(“0-15”, “16-24”, “25-34”, “35-44”, “45-54”, “55-64”, “65+”, “Not applicable”) )\ncensus2021teaching\\(ethnic_group_tb_6a &lt;- factor(\n    census2021teaching\\)ethnic_group_tb_6a, levels = c(1, 2, 3, 4, 5, -8), labels = c(“Asian”, “Black”, “Mixed”, “White”, “Other”, “Does not apply”) )\ncensus2021teaching\\(approx_social_grade &lt;- factor(\n    census2021teaching\\)approx_social_grade, levels = c(1, 2, 3, 4, -8), labels = c(“Higher, intermediate managers”, “Supervisory, junior managers”, “Skilled manual”, “Semi-skilled, unskilled manual”, “Not applicable”) )\ncensus2021teaching\\(sex &lt;- factor(\n    census2021teaching\\)sex, levels = c(1, 2), labels = c(“Male”, “Female”) )\n# Pick references that are central or policy relevant census2021teaching\\(hours_per_week_worked &lt;- relevel(census2021teaching\\)hours_per_week_worked, ref = “31-48”) census2021teaching\\(resident_age_7d         &lt;- relevel(census2021teaching\\)resident_age_7d, ref = “45-54”) census2021teaching\\(sex                  &lt;- relevel(census2021teaching\\)sex, ref = “Male”) census2021teaching\\(ethnic_group_tb_6a            &lt;- relevel(census2021teaching\\)ethnic_group_tb_6a, ref = “White”) census2021teaching\\(approx_social_grade         &lt;- relevel(census2021teaching\\)approx_social_grade, ref = “Higher, intermediate managers”)",
+    "text": "5 Regression model\n\n5.1 Recode variables as factors with labels\n\ncensus2021teaching$hours_per_week_worked &lt;- factor(\n  census2021teaching$hours_per_week_worked,\n  levels = c(1, 2, 3, 4, -8),\n  labels = c(\"0-15\", \"16-30\", \"31-48\", \"49+\", \"Does not apply\")\n)\n\ncensus2021teaching$resident_age_7d &lt;- factor(\n  census2021teaching$resident_age_7d,\n  levels = c(1, 2, 3, 4, 5, 6, 7, -8),\n  labels = c(\"0-15\", \"16-24\", \"25-34\", \"35-44\", \"45-54\", \"55-64\", \"65+\", \"Not applicable\")\n)\n\ncensus2021teaching$ethnic_group_tb_6a &lt;- factor(\n  census2021teaching$ethnic_group_tb_6a,\n  levels = c(1, 2, 3, 4, 5, -8),\n  labels = c(\"Asian\", \"Black\", \"Mixed\", \"White\", \"Other\", \"Does not apply\")\n)\n\ncensus2021teaching$approx_social_grade &lt;- factor(\n  census2021teaching$approx_social_grade,\n  levels = c(1, 2, 3, 4, -8),\n  labels = c(\"Higher, intermediate managers\",\n             \"Supervisory, junior managers\",\n             \"Skilled manual\",\n             \"Semi-skilled, unskilled manual\",\n             \"Not applicable\")\n)\n\ncensus2021teaching$sex &lt;- factor(\n  census2021teaching$sex,\n  levels = c(1, 2),\n  labels = c(\"Male\", \"Female\")\n)\n\n\n\n5.2 Pick references that are central or policy relevant\n\ncensus2021teaching$hours_per_week_worked &lt;- relevel(census2021teaching$hours_per_week_worked, ref = \"31-48\")\ncensus2021teaching$resident_age_7d         &lt;- relevel(census2021teaching$resident_age_7d,         ref = \"45-54\")\ncensus2021teaching$sex                  &lt;- relevel(census2021teaching$sex,                  ref = \"Male\")\ncensus2021teaching$ethnic_group_tb_6a            &lt;- relevel(census2021teaching$ethnic_group_tb_6a,            ref = \"White\")\ncensus2021teaching$approx_social_grade         &lt;- relevel(census2021teaching$approx_social_grade,         ref = \"Higher, intermediate managers\")\n\n\n\n5.3 Fit logistic regression\n\nmodel_health &lt;- glm(\n  Poor_health ~ hours_per_week_worked + resident_age_7d + sex + ethnic_group_tb_6a + approx_social_grade,\n  data = census2021teaching,\n  family = binomial(link = \"logit\")\n)\n\n\nObtain summary results of the logistic regression\n\nsummary(model_health)",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code for module activity</span>"
     ]
   },
   {
@@ -134,9 +134,9 @@
     "href": "chap1.html#fit-logistic-regression",
     "title": "R code for module activity",
     "section": "6 Fit logistic regression",
-    "text": "6 Fit logistic regression\nmodel_health &lt;- glm( Poor_health ~ hours_per_week_worked + resident_age_7d + sex + ethnic_group_tb_6a + approx_social_grade, data = census2021teaching, family = binomial(link = “logit”) )\n# Summary of results summary(model_health)",
+    "text": "6 Fit logistic regression\nmodel_health &lt;- glm( Poor_health ~ hours_per_week_worked + resident_age_7d + sex + ethnic_group_tb_6a + approx_social_grade, data = census2021teaching, family = binomial(link = “logit”) )\nsummary(model_health)",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code for module activity</span>"
     ]
   },
   {
@@ -157,6 +157,156 @@
     "text": "title: “R code”",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code</span>"
+    ]
+  },
+  {
+    "objectID": "chap1.html#install-and-load-the-main-packages",
+    "href": "chap1.html#install-and-load-the-main-packages",
+    "title": "R code for module activity",
+    "section": "",
+    "text": "Install packages\nIf any of the below packages is not installed on your computer, please install it. Remember to delete the # symbol before running the code.\n\n#install.packages(\"tidyverse\")\n#install.packages(\"ggplot2\")\n#install.packages(\"dplyr\")\n#install.packages(\"ggrepel\")\n#install.packages(\"patchwork\")\n#install.packages(\"gridExtra\")\n\n\n\nLoad packages\n\nlibrary(tidyverse)\nlibrary(ggplot2)\nlibrary(dplyr)\nlibrary(ggrepel)\nlibrary(patchwork)\nlibrary(gridExtra)\nlibrary(haven)",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code for module activity</span>"
+    ]
+  },
+  {
+    "objectID": "chap1.html#bivariate-analysis",
+    "href": "chap1.html#bivariate-analysis",
+    "title": "R code for module activity",
+    "section": "4.2 Bivariate analysis",
+    "text": "4.2 Bivariate analysis\ntabulation &lt;- table(census2021teaching\\(Poor_health, census2021teaching\\)hours_per_week_worked) tabulation\nprop.table(tabulation, margin = 1) * 100 prop.table(tabulation, margin = 2) * 100\ntabulation.health_hours &lt;- table(census2021teaching\\(Poor_health, census2021teaching\\)hours_per_week_worked) tabulation.health_age &lt;- table(census2021teaching\\(Poor_health, census2021teaching\\)resident_age_7d) tabulation.health_sex &lt;- table(census2021teaching\\(Poor_health, census2021teaching\\)sex) tabulation.health_ethnicity &lt;- table(census2021teaching\\(Poor_health, census2021teaching\\)ethnic_group_tb_6a) tabulation.health_classes &lt;- table(census2021teaching\\(Poor_health, census2021teaching\\)approx_social_grade)\nchisq.test(tabulation.health_hours) chisq.test(tabulation.health_age) chisq.test(tabulation.health_sex) chisq.test(tabulation.health_ethnicity) chisq.test(tabulation.health_classes)",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code for module activity</span>"
+    ]
+  },
+  {
+    "objectID": "chap1.html#install-packages",
+    "href": "chap1.html#install-packages",
+    "title": "R code for module activity",
+    "section": "Install packages",
+    "text": "Install packages",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code for module activity</span>"
+    ]
+  },
+  {
+    "objectID": "chap1.html#if-any-of-the-packages-below-is-not-installed-on-your-computer-remove-the-at-the-start-of-the-line-and-run-it-once.",
+    "href": "chap1.html#if-any-of-the-packages-below-is-not-installed-on-your-computer-remove-the-at-the-start-of-the-line-and-run-it-once.",
+    "title": "R code for module activity",
+    "section": "If any of the packages below is not installed on your computer, remove the # at the start of the line and run it once.",
+    "text": "If any of the packages below is not installed on your computer, remove the # at the start of the line and run it once.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code for module activity</span>"
+    ]
+  },
+  {
+    "objectID": "chap1.html#load-packages",
+    "href": "chap1.html#load-packages",
+    "title": "R code for module activity",
+    "section": "Load packages",
+    "text": "Load packages\nlibrary(tidyverse) library(ggplot2) library(dplyr) library(ggrepel) library(patchwork) library(gridExtra) library(haven)",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code for module activity</span>"
+    ]
+  },
+  {
+    "objectID": "chap1.html#important",
+    "href": "chap1.html#important",
+    "title": "R code for module activity",
+    "section": "Important",
+    "text": "Important",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code for module activity</span>"
+    ]
+  },
+  {
+    "objectID": "chap1.html#if-your-dataset-is-stored-elsewhere-update-the-file-path-above.",
+    "href": "chap1.html#if-your-dataset-is-stored-elsewhere-update-the-file-path-above.",
+    "title": "R code for module activity",
+    "section": "If your dataset is stored elsewhere, update the file path above.",
+    "text": "If your dataset is stored elsewhere, update the file path above.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code for module activity</span>"
+    ]
+  },
+  {
+    "objectID": "chap1.html#if-read_sav-does-not-work-you-can-use-the-import-dataset-button-in-the-environment-pane.",
+    "href": "chap1.html#if-read_sav-does-not-work-you-can-use-the-import-dataset-button-in-the-environment-pane.",
+    "title": "R code for module activity",
+    "section": "If read_sav does not work, you can use the Import Dataset button in the Environment pane.",
+    "text": "If read_sav does not work, you can use the Import Dataset button in the Environment pane.\ncensus2021teaching &lt;- publicmicrodatateachingsample",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code for module activity</span>"
+    ]
+  },
+  {
+    "objectID": "chap1.html#univariate-analysis",
+    "href": "chap1.html#univariate-analysis",
+    "title": "R code for module activity",
+    "section": "4.1 Univariate analysis",
+    "text": "4.1 Univariate analysis",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code for module activity</span>"
+    ]
+  },
+  {
+    "objectID": "chap1.html#health-in-general-and-hours-worked",
+    "href": "chap1.html#health-in-general-and-hours-worked",
+    "title": "R code for module activity",
+    "section": "4.1.1 Health in general and hours worked",
+    "text": "4.1.1 Health in general and hours worked\ntable(census2021teaching\\(health_in_general)\nprop.table(table(census2021teaching\\)health_in_general)) * 100\ntable(census2021teaching\\(hours_per_week_worked)\nprop.table(table(census2021teaching\\)hours_per_week_worked)) * 100",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code for module activity</span>"
+    ]
+  },
+  {
+    "objectID": "chap1.html#frequencies-and-percentages-with-labels",
+    "href": "chap1.html#frequencies-and-percentages-with-labels",
+    "title": "R code for module activity",
+    "section": "Frequencies and percentages with labels",
+    "text": "Frequencies and percentages with labels\ncensus2021teaching %&gt;% mutate( health_code = as.integer(as.character(health_in_general)), health_label = factor( health_code, levels = c(1, 2, 3, 4, 5, -8), labels = c(“Very good”, “Good”, “Fair”, “Bad”, “Very bad”, “Does not apply”) ) ) %&gt;% count(health_label) %&gt;% mutate(percent = round(100 * n / sum(n), 1))\ncensus2021teaching %&gt;% mutate( hours_code = as.integer(as.character(hours_per_week_worked)), hours_label = factor( hours_code, levels = c(1, 2, 3, 4, -8), labels = c(“0 to 15”, “16 to 30”, “31 to 48”, “49 and plus”, “Does not apply”) ) ) %&gt;% count(hours_label) %&gt;% mutate(percent = round(100 * n / sum(n), 1))",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code for module activity</span>"
+    ]
+  },
+  {
+    "objectID": "chap1.html#pie-charts",
+    "href": "chap1.html#pie-charts",
+    "title": "R code for module activity",
+    "section": "Pie charts",
+    "text": "Pie charts\nhealth &lt;- census2021teaching %&gt;% mutate( health_code = as.integer(as.character(health_in_general)), health_label = factor( health_code, levels = c(1, 2, 3, 4, 5, -8), labels = c(“Very good”, “Good”, “Fair”, “Bad”, “Very bad”, “Not applicable”) ) ) %&gt;% filter(!is.na(health_label)) %&gt;% count(health_label, name = “n”) %&gt;% mutate( pct = round(100 * n / sum(n), 1), label = paste0(health_label, ” (“, pct,”%)“) )\np1 &lt;- ggplot(health, aes(x = ““, y = n, fill = health_label)) + geom_col(width = 1, color =”white”) + coord_polar(theta = “y”) + geom_label_repel( aes(label = label), position = position_stack(vjust = 0.5), show.legend = FALSE, size = 3 ) + labs(title = “Distribution of general health”, fill = “Health status”) + theme_void()\np1\nhours &lt;- census2021teaching %&gt;% mutate( hours_code = as.integer(as.character(hours_per_week_worked)), hours_label = factor( hours_code, levels = c(1, 2, 3, 4, -8), labels = c(“0 to 15”, “16 to 30”, “31 to 48”, “49 and plus”, “Not applicable”) ) ) %&gt;% filter(!is.na(hours_label)) %&gt;% count(hours_label, name = “n”) %&gt;% mutate( pct = round(100 * n / sum(n), 1), label = paste0(hours_label, ” (“, pct,”%)“) )\np2 &lt;- ggplot(hours, aes(x = ““, y = n, fill = hours_label)) + geom_col(width = 1, color =”white”) + coord_polar(theta = “y”) + geom_label_repel( aes(label = label), position = position_stack(vjust = 0.5), show.legend = FALSE, size = 3 ) + labs(title = “Distribution of worked hours”, fill = “Hours worked”) + theme_void()\np2",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code for module activity</span>"
+    ]
+  },
+  {
+    "objectID": "chap1.html#transform-health-into-a-binary-outcome",
+    "href": "chap1.html#transform-health-into-a-binary-outcome",
+    "title": "R code for module activity",
+    "section": "Transform health into a binary outcome",
+    "text": "Transform health into a binary outcome\ncensus2021teaching\\(health_binary &lt;- ifelse(\n  census2021teaching\\)health_in_general %in% c(1, 2), “Good or very good health”, ifelse( census2021teaching$health_in_general %in% c(3, 4, 5), “Poor health”, NA ) )\ncensus2021teaching &lt;- subset(census2021teaching, health_in_general != -8)\ntable(census2021teaching$health_binary)\ncensus2021teaching\\(Poor_health &lt;- ifelse(\n  census2021teaching\\)health_binary == “Poor health”, 1, ifelse(census2021teaching$health_binary == “Good or very good health”, 0, NA) )\ntable(census2021teaching$Poor_health)",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code for module activity</span>"
+    ]
+  },
+  {
+    "objectID": "chap1.html#age-sex-ethnicity-social-category",
+    "href": "chap1.html#age-sex-ethnicity-social-category",
+    "title": "R code for module activity",
+    "section": "4.1.2 Age, sex, ethnicity, social category",
+    "text": "4.1.2 Age, sex, ethnicity, social category\ntable(census2021teaching\\(resident_age_7d)\nprop.table(table(census2021teaching\\)resident_age_7d)) * 100\ntable(census2021teaching\\(sex)\nprop.table(table(census2021teaching\\)sex)) * 100\ntable(census2021teaching\\(ethnic_group_tb_6a)\nprop.table(table(census2021teaching\\)ethnic_group_tb_6a)) * 100\ntable(census2021teaching\\(approx_social_grade)\nprop.table(table(census2021teaching\\)approx_social_grade)) * 100",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code for module activity</span>"
+    ]
+  },
+  {
+    "objectID": "chap1.html#drop-under-16",
+    "href": "chap1.html#drop-under-16",
+    "title": "R code for module activity",
+    "section": "Drop under 16",
+    "text": "Drop under 16\ncensus2021teaching &lt;- subset(census2021teaching, resident_age_7d != 1)",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>R code for module activity</span>"
     ]
   }
 ]
