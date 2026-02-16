@@ -2,7 +2,7 @@
 
 ## 1- Install and load the main packages
 
-### Install packages
+#### Install packages
 
 If any of the below packages is not installed on your computer, please install it. Remember to delete the **#** symbol before running the code.
 
@@ -17,7 +17,7 @@ If any of the below packages is not installed on your computer, please install i
 
 ```
 
-### Load packages
+#### Load packages
 
 ```{r, eval=FALSE}
 
@@ -60,7 +60,7 @@ census2021teaching <- census2021teaching[,c("health_in_general",
 
 ### 4.1- Univariate analysis 
 
-### 4.1.1 Univariate analysis for health in general and hours worked
+#### 4.1.1 Univariate analysis for health in general and hours worked
 
 ##### Frequencies for health in general and hours worked
 
