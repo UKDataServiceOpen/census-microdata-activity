@@ -2,38 +2,30 @@
 
 ## 1- Install and load the main packages
 
-#### Install packages
 
-If any of the below packages is not installed on your computer, please install it. Remember to delete the **#** symbol before running the code.
+```{r packages}
+#### Load the packages if installed; install them if not present 
 
-```{r, eval=FALSE}
+pkg <- c("tidyverse", 
+         "ggplot2", 
+         "ggrepel", 
+         "patchwork", 
+         "gridExtra", 
+         "haven",   ### Import Stata and SPSS datasets
+         "viridis"  ### colourblind friendly palette
+)
 
-#install.packages("tidyverse")
-#install.packages("ggplot2")
-#install.packages("dplyr")
-#install.packages("ggrepel")
-#install.packages("patchwork")
-#install.packages("gridExtra")
-
-```
-
-#### Load packages
-
-```{r, eval=FALSE}
-
-library(tidyverse)
-library(ggplot2)
-library(dplyr)
-library(ggrepel)
-library(patchwork)
-library(gridExtra)
-library(haven)
-
+for (p in pkg) {
+  if (!require(p, character.only = T)) {
+    install.packages(p)
+    library(p, character.only = T)
+  }
+}
 ```
 
 ## 2- Load the dataset and make a copy
 
-```{r, eval=FALSE}
+```{r}
 
 publicmicrodatateachingsample <- read_sav("data/publicmicrodatateachingsample.sav")
 
@@ -41,20 +33,41 @@ census2021teaching <- publicmicrodatateachingsample
 
 ```
 
-Important: Remember to change to pathway to your dataset accordingly. 
+Important: Remember to change the filepath to your dataset accordingly. 
 
-If the **read_sav** code does not work, you can use the **Import Dataset** button in the Environment pane to load the dataset in R.
+If the **read_sav** code does not work, you can use the **Import Dataset** button in the RStudio Environment Pane to load the dataset in R.
 
 ## 3- Drop unnecessary variables
 
-```{r, eval=FALSE}
-
+```{r}
+#| eval: false
 census2021teaching <- census2021teaching[,c("health_in_general",
                                             "hours_per_week_worked",
                                             "resident_age_7d","sex", 
                                             "ethnic_group_tb_6a",
                                             "approx_social_grade")]
+
+head(census2021teaching)
+dim(census2021teaching)
 ```
+
+::: {.callout-note collapse="true"}
+
+## Click to view results
+
+```{r}
+#| echo: false
+census2021teaching <- census2021teaching[,c("health_in_general",
+                                            "hours_per_week_worked",
+                                            "resident_age_7d","sex", 
+                                            "ethnic_group_tb_6a",
+                                            "approx_social_grade")]
+
+head(census2021teaching)
+dim(census2021teaching)
+```
+
+:::
 
 ## 4- Exploratory analysis
 
@@ -64,149 +77,174 @@ census2021teaching <- census2021teaching[,c("health_in_general",
 
 ##### Frequencies for health in general and hours worked
 
-```{r, eval=FALSE}
+```{r}
+#| eval: false
 
+### Raw values
 table(census2021teaching$health_in_general)
 
-table(census2021teaching$hours_per_week_worked)
+### Labelled  values
+table(as_factor(census2021teaching$hours_per_week_worked))
 
 ```
 
-##### Percentages for health in general and hours worked
+::: {.callout-note collapse="true"}
+
+## Click to view results
+
+```{r}
+#| echo: false
+
+### Raw values
+table(census2021teaching$health_in_general)
+
+### Labelled  values
+table(as_factor(census2021teaching$hours_per_week_worked))
+```
+
+:::
+
+##### Distribution of self-rated health and hours worked
 
 
-```{r, eval=FALSE}
+```{r}
+#| eval: false
 
-prop.table(table(census2021teaching$health_in_general)) * 100
+round(
+      prop.table(
+        table(
+          as_factor(census2021teaching$health_in_general
+                )
+      )
+      ) * 100,
+      1) 
 
-prop.table(table(census2021teaching$hours_per_week_worked)) * 100
+round(
+  prop.table(
+    table(
+      as_factor(census2021teaching$hours_per_week_worked)
+      )
+    ) * 100,
+  1)
+
+```
+::: {.callout-note collapse="true"}
+
+## Click to view results
+
+```{r}
+#| echo: false
+
+round(
+      prop.table(
+        table(
+          as_factor(census2021teaching$health_in_general
+                )
+      )
+      ) * 100,
+      1) 
+
+round(
+  prop.table(
+    table(
+      as_factor(census2021teaching$hours_per_week_worked)
+      )
+    ) * 100,
+  1)
 
 ```
 
-You can also calculate these frequencies and percentages with appropriate labels.
+:::
+
+<!-- You can also calculate these frequencies and percentages with appropriate labels. -->
 
 ##### Frequencies and percentages with labels for health in general and hours worked
 
-  
-```{r, eval=FALSE}
-
-census2021teaching %>%
-  mutate(
-    health_code = as.integer(as.character(health_in_general)),
-    health_label = factor(
-      health_code,
-      levels = c(1, 2, 3, 4, 5, -8),
-      labels = c("Very good", "Good", "Fair", "Bad", "Very bad", "Does not apply")
-    )
-  ) %>%
-  count(health_label) %>%
-  mutate(percent = round(100 * n / sum(n), 1))
-
-
-census2021teaching %>%
-  mutate(
-    hours_code = as.integer(as.character(hours_per_week_worked)),
-    hours_label = factor(
-      hours_code,
-      levels = c(1, 2, 3, 4, -8),
-      labels = c("[0 – 15]", "[16 – 30]", "[31 – 48]", "[49 and +]", "Does not apply")
-    )
-  ) %>%
-  count(hours_label) %>%
-  mutate(percent = round(100 * n / sum(n), 1))
-
-```
 
 You can also generate pie charts for better visualization
 
-### a) Pie chart for Health in general
+### a) Pie chart for self-rated general health
 
-##### a.1) Create a labelled health variable
-  
-```{r, eval=FALSE}
 
-health <- census2021teaching %>%
-  mutate(
-    health_code = as.integer(as.character(health_in_general)),
-    health_label = factor(
-      health_code,
-      levels = c(1,2,3,4,5,-8),
-      labels = c("Very good", "Good", "Fair", "Bad", "Very bad", "Not applicable")
-    )
-  ) %>%
-  filter(!is.na(health_label)) %>%
-  count(health_label, name = "n") %>%
-  mutate(
-    pct = round(100 * n / sum(n), 1),
-    label = paste0(health_label, " (", pct, "%)")
-  )
+
+```{r p1}
+#| eval: false
+
+h1<-round(100*
+            prop.table(
+              table(
+                as_factor(census2021teaching$health_in_general)
+                )
+              ),1
+          )
+
+h1_df <- as.data.frame(h1)
+
+names(h1_df) <- c("srh", "pct")
+
+pie(h1_df$pct,
+    labels = paste(h1_df$srh, sep = " ", h1_df$pct, "%"),
+    cex = 0.7, 
+    radius=0.9,
+    col = viridis::viridis(length(h1_df$srh)), 
+    main = "Self-rated general health")
+
+```
+::: {.callout-note collapse="true"}
+
+## Click to view results
+```{r p1.2}
+#| echo: false
+
+h1<-round(100*
+            prop.table(
+              table(
+                as_factor(census2021teaching$health_in_general)
+                )
+              ),1
+          )
+
+h1_df <- as.data.frame(h1)
+
+names(h1_df) <- c("srh", "pct")
+
+pie(h1_df$pct,
+    labels = paste(h1_df$srh, sep = " ", h1_df$pct, "%"),
+    cex = 0.7, 
+    radius=0.9,
+    col = viridis::viridis(length(h1_df$srh)), 
+    main = "Self-rated general health")
 
 ```
 
-##### a.2) Plot pie chart
-
-
-```{r, eval=FALSE}
-
-p1 <- ggplot(health, aes(x = "", y = n, fill = health_label)) +
-  geom_col(width = 1, color = "white") +
-  coord_polar(theta = "y") +
-  geom_label_repel(aes(label = label),
-                   position = position_stack(vjust = 0.5),
-                   show.legend = FALSE,
-                   size = 3) +
-  labs(title = "Distribution of general health", fill = "Health status") +
-  theme_void()+
-  scale_fill_brewer(palette = "Set2") +
-  theme(plot.title = element_text(size = 16, hjust = 1))
-
-p1
-
-```
+:::
 
 ### b) Pie chart for Hours worked
 
 ##### b.1) Create a labelled hours worked variable
 
 
-```{r, eval=FALSE}
+```{r p2}
+#| code-fold: true
+#| code-summary: "View output"
 
-hours <- census2021teaching %>%
-  mutate(
-    hours_code = as.integer(as.character(hours_per_week_worked)),
-    hours_label = factor(
-      hours_code,
-      levels = c(1, 2, 3, 4, -8),
-      labels = c("[0 – 15]", "[16 – 30]", "[31 – 48]", "[49 and +]", "Not applicable")
-    )
-  ) %>%
-  filter(!is.na(hours_label)) %>%
-  count(hours_label, name = "n") %>%
-  mutate(
-    pct = round(100 * n / sum(n), 1),
-    label = paste0(hours_label, " (", pct, "%)")
-  )
+h2<-round(100*
+            prop.table(
+              table(
+                as_factor(census2021teaching$hours_per_week_worked))
+              ),1
+          )
 
-```
+h2_df <- as.data.frame(h2)
 
-##### b.2) Plot pie chart
+names(h2_df) <- c("hpw", "pct")
 
-
-```{r, eval=FALSE}
-
-p2 <- ggplot(hours, aes(x = "", y = n, fill = hours_label)) +
-  geom_col(width = 1, color = "white") +
-  coord_polar(theta = "y") +
-  geom_label_repel(aes(label = label),
-                   position = position_stack(vjust = 0.5),
-                   show.legend = FALSE,
-                   size = 3) +
-  labs(title = "Distribution of worked hours", fill = "Hours worked") +
-  theme_void()+
-  scale_fill_brewer(palette = "Dark2") +
-  theme(plot.title = element_text(size = 16, hjust = 1))
-
-p2
+p2<-pie(h2_df$pct,
+    labels = paste(h2_df$hpw, sep = " ", h2_df$pct, "%"),
+    cex = 0.7, 
+    radius=0.9,
+    col = viridis::viridis(length(h2_df$hpw)), 
+    main = "Hours worked per week")
 
 ```
 
@@ -216,7 +254,7 @@ p2
 Create a new variable called **health_binary** by regrouping health in general in two broader categories: **Good or very good health** and **Poor health**
 
 
-```{r, eval=FALSE}
+```{r}
 
 census2021teaching$health_binary <- ifelse(
   census2021teaching$health_in_general %in% c(1, 2), "Good or very good health",
@@ -227,15 +265,16 @@ census2021teaching$health_binary <- ifelse(
 
 ##### Drop rows where health_in_general = -8 (Does not apply)
 
-```{r, eval=FALSE}
+```{r}
 
-census2021teaching <- subset(census2021teaching, health_in_general != -8)
+census2021teaching <-census2021teaching %>%
+                      filter(health_in_general != -8)
 
 ```
 
 ##### Check the new variable's distribution
 
-```{r, eval=FALSE}
+```{r}
 
 table(census2021teaching$health_binary)
 
@@ -245,7 +284,7 @@ table(census2021teaching$health_binary)
 
 Code a binary variable that takes 1 for poor health and 0 otherwise. Call this new variable **Poor_health**. This variable will be the explained variable of our regression model.
 
-```{r, eval=FALSE}
+```{r}
 
 census2021teaching$Poor_health <- ifelse(
   census2021teaching$health_binary == "Poor health", 1,
@@ -260,89 +299,53 @@ table(census2021teaching$Poor_health)
 
 #### Frequencies and percentages for age, sex, ethnicity, social category 
 
-```{r, eval=FALSE}
+```{r}
 
-table(census2021teaching$resident_age_7d)
-table(census2021teaching$sex)
-table(census2021teaching$ethnic_group_tb_6a)
-table(census2021teaching$approx_social_grade)
+t_a<-table(as_factor(census2021teaching$resident_age_7d))
+t_s<-table(as_factor(census2021teaching$sex))
+t_e<-table(as_factor(census2021teaching$ethnic_group_tb_6a))
+t_g<-table(as_factor(census2021teaching$approx_social_grade))
 
-prop.table(table(census2021teaching$resident_age_7d)) * 100
-prop.table(table(census2021teaching$sex)) * 100
-prop.table(table(census2021teaching$ethnic_group_tb_6a)) * 100
-prop.table(table(census2021teaching$approx_social_grade)) * 100
+cbind(t_a,round(prop.table(t_a)*100,1))
+cbind(t_s,round(prop.table(t_s)*100,1))
+cbind(t_e,round(prop.table(t_e)*100,1))
+cbind(t_g,round(prop.table(t_g)*100,1))
 
 ```
 
 #### Plot pie chart Age variable
 
-##### a) Create a labelled Age variable
+```{r}
 
-```{r, eval=FALSE}
 
-Age <- census2021teaching %>%
-  mutate(
-    Age_code = as.integer(as.character(resident_age_7d)),
-    Age_label = factor(
-      Age_code,
-      levels = c(1, 2, 3, 4,5,6,7, -8),
-      labels = c("]0 – 15]", "[16 – 24]", "[25 – 34]", "[35 - 44]", "[45 - 54]", "[55 - 64]", "[65 and +]","Not applicable")
-    )
-  ) %>%
-  filter(!is.na(Age_label)) %>%
-  count(Age_label, name = "n") %>%
-  mutate(
-    pct = round(100 * n / sum(n), 1),
-    label = paste0(Age_label, " (", pct, "%)")
-  )
+t_a.df <- as.data.frame(round(prop.table(t_a)*100,1))
+names(t_a.df) <- c("age", "pct")
+
+pie(t_a.df$pct,
+    labels = paste(t_a.df$age, sep = " ", t_a.df$pct, "%"),
+    cex = 0.7, 
+    radius=0.9,
+    col = viridis::viridis(length(t_a.df$age)), 
+    main = "Distribution of respondents by age")
+
 
 ```
 
-##### b) Plot pie chart
+#### Pie chart for Sex variable
 
-```{r, eval=FALSE}
 
-ggplot(Age, aes(x = "", y = n, fill = Age_label)) +
-  geom_col(width = 1, color = "white") +
-  coord_polar(theta = "y") +
-  geom_label_repel(aes(label = label),
-                   position = position_stack(vjust = 0.5),
-                   show.legend = FALSE,
-                   size = 3) +
-  labs(title = "Distribution of respondents by Age", fill = "Resident age") +
-  theme_void()+
-  scale_fill_brewer(palette = "Pastel1") +
-  theme(plot.title = element_text(size = 16, hjust = 1))
+```{r}
 
-```
+t_s.df <- as.data.frame(round(prop.table(t_s)*100,1))
+names(t_s.df) <- c("sex", "pct")
 
-#### Histogram for Sex variable
+pie(t_s.df$pct,
+    labels = paste(t_s.df$sex, sep = " ", t_s.df$pct, "%"),
+    cex = 0.7, 
+    radius=0.9,
+    col = viridis::viridis(length(t_a.df$age)), 
+    main = "Distribution of respondents by sex")
 
-##### a) Recode sex variable with labels
-
-```{r, eval=FALSE}
-
-sex <- census2021teaching %>%
-  mutate(sex_label = factor(sex, levels = c(1, 2), labels = c("Male", "Female"))) %>%
-  count(sex_label, name = "n") %>%
-  mutate(prop = n / sum(n),
-         label = scales::percent(prop, accuracy = 0.1))
-
-```
-
-##### b) Plot histogram
-
-```{r, eval=FALSE}
-
-ggplot(sex, aes(x = sex_label, y = prop)) +
-  geom_col(fill = "skyblue", color = "black", width = 0.3) +
-  geom_text(aes(label = label), vjust = -0.5) +
-  scale_y_continuous(labels = scales::percent_format()) +
-  scale_x_discrete(expand = expansion(mult = c(0.5, 0.7))) +
-  labs(title = "Distribution of respondents by sex", x = "", y = "Percentage") +
-  theme_classic()+
-  theme(axis.text.x = element_text(size = 12))+
-  theme(plot.title = element_text(size = 16, hjust = 0.5))
 
 ```
 
@@ -350,7 +353,7 @@ ggplot(sex, aes(x = sex_label, y = prop)) +
 
 ##### a) Recode Ethnicity variable with labels
 
-```{r, eval=FALSE}
+```{r}
 
 Ethnicity <- census2021teaching %>%
   mutate(Ethnicity_label = factor(ethnic_group_tb_6a, levels = c(1, 2, 3, 4, 5, -8), 
@@ -363,7 +366,7 @@ Ethnicity <- census2021teaching %>%
 
 ##### b) Plot histogram
 
-```{r, eval=FALSE}
+```{r}
 
 ggplot(Ethnicity, aes(x = Ethnicity_label, y = prop)) +
   geom_col(fill = "chocolate", color = "black", width = 0.3) +
@@ -380,7 +383,7 @@ ggplot(Ethnicity, aes(x = Ethnicity_label, y = prop)) +
 
 ##### a) Create a labelled social class variable
 
-```{r, eval=FALSE}
+```{r}
 
 Social_class <- census2021teaching %>%
   mutate(
@@ -403,7 +406,7 @@ Social_class <- census2021teaching %>%
 
 ##### b) Plot pie chart
 
-```{r, eval=FALSE}
+```{r}
 
 ggplot(Social_class, aes(x = "", y = n, fill = Social_class_label)) +
   geom_col(width = 1, color = "white") +
@@ -421,7 +424,7 @@ ggplot(Social_class, aes(x = "", y = n, fill = Social_class_label)) +
 
 ##### Drop under 16 from the table
 
-```{r, eval=FALSE}
+```{r}
 
 census2021teaching <- subset(census2021teaching, resident_age_7d != 1)
 
@@ -431,7 +434,7 @@ census2021teaching <- subset(census2021teaching, resident_age_7d != 1)
 
 ##### Cross tabulation of Poor_health by hours worked
 
-```{r, eval=FALSE}
+```{r}
 
 tabulation <- table(census2021teaching$Poor_health, census2021teaching$hours_per_week_worked)
 tabulation
@@ -440,7 +443,7 @@ tabulation
 
 ##### Row percentages
 
-```{r, eval=FALSE}
+```{r}
 
 prop.table(tabulation, margin = 1) * 100
 
@@ -448,7 +451,7 @@ prop.table(tabulation, margin = 1) * 100
 
 ##### Column percentages
 
-```{r, eval=FALSE}
+```{r}
 
 prop.table(tabulation, margin = 2) * 100
 
@@ -457,7 +460,7 @@ prop.table(tabulation, margin = 2) * 100
 
 ##### a) Creating cross tabulations to be tested
 
-```{r, eval=FALSE}
+```{r}
 
 tabulation.health_hours <- table(census2021teaching$Poor_health, census2021teaching$hours_per_week_worked)
 tabulation.health_age <- table(census2021teaching$Poor_health, census2021teaching$resident_age_7d)
@@ -469,7 +472,7 @@ tabulation.health_classes <- table(census2021teaching$Poor_health, census2021tea
 
 ##### b) chi square test on health and our 5 other variables
 
-```{r, eval=FALSE}
+```{r}
 
 chisq.test(tabulation.health_hours)
 chisq.test(tabulation.health_age)
@@ -482,7 +485,7 @@ chisq.test(tabulation.health_classes)
 
 ### 5.1 Recode variables as factors with labels
 
-```{r, eval=FALSE}
+```{r}
 
 census2021teaching$hours_per_week_worked <- factor(
   census2021teaching$hours_per_week_worked,
@@ -522,7 +525,7 @@ census2021teaching$sex <- factor(
 
 ### 5.2 Pick references that are central or policy relevant
 
-```{r, eval=FALSE}
+```{r}
 
 census2021teaching$hours_per_week_worked <- relevel(census2021teaching$hours_per_week_worked, ref = "31-48")
 census2021teaching$resident_age_7d         <- relevel(census2021teaching$resident_age_7d,         ref = "45-54")
@@ -535,7 +538,7 @@ census2021teaching$approx_social_grade         <- relevel(census2021teaching$app
 ### 5.3 Fit logistic regression 
 
 
-```{r, eval=FALSE}
+```{r}
 
 model_health <- glm(
   Poor_health ~ hours_per_week_worked + resident_age_7d + sex + ethnic_group_tb_6a + approx_social_grade,
@@ -546,7 +549,7 @@ model_health <- glm(
 ```
 #### Obtain summary results of the logistic regression
 
-```{r, eval=FALSE}
+```{r}
 
 summary(model_health)
 
