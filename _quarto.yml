@@ -4,7 +4,7 @@ project:
 
 ### Code execution options
 execute:                       ### How R code is going to be interpreted
-  eval: false
+  eval: true
   echo: true                   ### These can be changed for individual code blocks
   warning: false
   message: false
