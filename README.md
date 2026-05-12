@@ -1,4 +1,6 @@
-# Getting Started with Census Microdata – R Code
+<img src="pics/UKDS_Logos_Col_Grey_300dpi.png" alt="UK Data Service Logo" style="width:256px;">
+
+# Getting Started with Census Microdata - R Code
 
 ## Overview
 
