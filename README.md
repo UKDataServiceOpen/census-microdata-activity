@@ -8,11 +8,11 @@ The materials are designed to help learners and researchers build confidence wor
 ## What this repository contains
 
 This repository includes:
-•	A Quarto (.qmd) page presenting the full R script used in the activity
-•	Reproducible R code 
-•	Clear sectioning aligned with the learning activity structure
+- A Quarto (.qmd) page presenting the full R script used in the activity
+- Reproducible R code 
+- Clear sectioning aligned with the learning activity structure
 
-Note: The code is displayed for reference in the Quarto page. It does not run directly within the rendered page and is intended to be copied and run locally in R/RStudio.
+**Note:** The code is displayed for reference in the Quarto page. It does not run directly within the rendered page and is intended to be copied and run locally in R/RStudio.
 
 ## Data used, citation and licence
 
